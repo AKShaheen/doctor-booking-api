@@ -1,18 +1,55 @@
 import express from "express";
 import mongoose from "mongoose";
-import { doctorAvailabilityRoutes } from "./modules/doctorAvailability/infrastructure/routes";
+import { doctorAvailabilityRoutes } from "./modules/routes/routes";
+// import Redis from "ioredis";
 
 const app = express();
 app.use(express.json());
 
-mongoose
-  .connect("mongodb://localhost:27017/doctor-appointments")
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+const IS_CONSUMER_SERVER: boolean = process.env.IS_CONSUMER_SERVER === "true";
+const PORT: number =
+  Number(process.env.PORT) || (IS_CONSUMER_SERVER ? 3002 : 3001);
+const MONGO_URI: string =
+  process.env.MONGO_URI || "mongodb://mongo:27017/doctor-booking-db";
+// const REDIS_URI: string = process.env.REDIS_URI || "redis://localhost:6379";
 
-app.use("/api/availability", doctorAvailabilityRoutes);
+// Initialize MongoDB connection
+async function connectToMongoDB(): Promise<void> {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  }
+}
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+async function initializeBackendService(): Promise<void> {
+  app.use("/api", doctorAvailabilityRoutes);
+
+  app.all("", (req, res) => {
+    res.send("success");
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Backend service running on port ${PORT}`);
+  });
+}
+
+// Main initialization function
+async function main(): Promise<void> {
+  await connectToMongoDB();
+  // await connectToRedis();
+
+  if (IS_CONSUMER_SERVER) {
+    //initialize consumer
+    console.log("Consumer started successfully");
+  } else {
+    await initializeBackendService();
+  }
+}
+
+main().catch((err: Error) => {
+  console.error("Application initialization error:", err);
+  process.exit(1);
 });
