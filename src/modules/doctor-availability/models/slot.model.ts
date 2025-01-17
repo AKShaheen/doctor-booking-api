@@ -7,6 +7,7 @@ interface ISlot {
   time: string;
   isReserved: boolean;
   isCanceled: boolean;
+  isCompleted: boolean;
 }
 
 const slotSchema = new Schema<ISlot>(
@@ -32,6 +33,10 @@ const slotSchema = new Schema<ISlot>(
       default: false,
     },
     isCanceled: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
       type: Boolean,
       default: false,
     },
