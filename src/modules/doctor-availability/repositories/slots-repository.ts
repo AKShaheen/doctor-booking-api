@@ -1,4 +1,4 @@
-import SlotModel from "../models/slot.model";
+import SlotModel, { ISlot } from "../models/slot.model";
 
 export class SlotRepository {
   async addSlot(slot: any): Promise<void> {
@@ -11,5 +11,24 @@ export class SlotRepository {
       { doctorId },
       { __v: false, _id: false, createdAt: false, updatedAt: false }
     );
+  }
+
+  async getAvailableSlots(): Promise<any[]> {
+    return SlotModel.find(
+      { isReserved: false },
+      { time: true, doctorName: true, cost: true }
+    );
+  }
+
+  async getSlotById(slotId: string): Promise<Pick<ISlot, "isReserved"> | null> {
+    const slotData = await SlotModel.findOne(
+      { _id: slotId },
+      { isReserved: true }
+    );
+    return slotData ? slotData : null;
+  }
+
+  async reserveSlotStatus(slotId: string) {
+    return SlotModel.updateOne({ _id: slotId }, { isReserved: true });
   }
 }

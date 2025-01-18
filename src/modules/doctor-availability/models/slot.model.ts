@@ -1,13 +1,11 @@
 import { Schema, model } from "mongoose";
 
-interface ISlot {
+export interface ISlot {
   doctorId: string;
   doctorName: string;
   cost: number;
   time: string;
   isReserved: boolean;
-  isCanceled: boolean;
-  isCompleted: boolean;
 }
 
 const slotSchema = new Schema<ISlot>(
@@ -29,14 +27,6 @@ const slotSchema = new Schema<ISlot>(
       required: true,
     },
     isReserved: {
-      type: Boolean,
-      default: false,
-    },
-    isCanceled: {
-      type: Boolean,
-      default: false,
-    },
-    isCompleted: {
       type: Boolean,
       default: false,
     },

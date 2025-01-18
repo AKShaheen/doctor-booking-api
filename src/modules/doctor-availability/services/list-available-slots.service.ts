@@ -1,9 +1,9 @@
 import { SlotRepository } from "../repositories/slots-repository";
 
-export class ListSlotsService {
+export class ListAvailableSlotsService {
   constructor(private readonly slotRepository = new SlotRepository()) {}
 
-  async listSlots(doctorId: string) {
-    return this.slotRepository.getSlotsByDoctorId(doctorId);
+  async listAvailableSlots() {
+    return this.slotRepository.getAvailableSlots();
   }
 }
