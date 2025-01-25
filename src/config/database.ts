@@ -1,11 +1,14 @@
-// import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-// export async function connectDatabase(): Promise<void> {
-//   try {
-//     await mongoose.connect("mongodb://localhost:27017/doctor-appointments");
-//     console.log("Connected to MongoDB");
-//   } catch (error) {
-//     console.error("MongoDB connection error:", error);
-//     process.exit(1);
-//   }
-// }
+const MONGO_URI: string =
+  process.env.MONGO_URI || 'mongodb://mongo:27017/doctor-booking-db';
+
+export async function connectToMongoDB(): Promise<void> {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  }
+}

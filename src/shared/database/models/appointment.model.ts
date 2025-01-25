@@ -1,16 +1,38 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
-const appointmentSchema = new Schema({
-  slotId: { type: Schema.Types.ObjectId, required: true },
-  patientId: { type: Schema.Types.ObjectId, required: true },
-  patientName: { type: String, required: true },
-  doctorId: { type: Schema.Types.ObjectId, required: true },
-  time: { type: Date, required: true },
+export interface IAppointment {
+  slotId: string;
+  patientId: string;
+  patientName: string;
+  reservedAt: Date;
+  status: string;
+}
+
+const appointmentSchema = new Schema<IAppointment>({
+  slotId: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  patientId: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  patientName: {
+    type: String,
+    required: true,
+  },
+  reservedAt: {
+    type: Schema.Types.Date,
+    required: true,
+  },
   status: {
     type: String,
-    enum: ["scheduled", "completed", "cancelled"],
-    default: "scheduled",
+    enum: ['scheduled', 'completed', 'cancelled'],
+    default: 'scheduled',
   },
 });
 
-export const AppointmentModel = model("Appointment", appointmentSchema);
+export const AppointmentModel = model<IAppointment>(
+  'Appointment',
+  appointmentSchema
+);

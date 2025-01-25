@@ -1,13 +1,14 @@
-import { Appointment } from "../../domain/entites/appointment";
+import { eventEmitter } from '../../../../shared/events/event-emitter';
+import { Appointment } from '../../domain/entities/appointment.entity';
 import {
   IAppointmentRepository,
-  ISlotRepository,
-} from "../../domain/repository";
+  ISlotsRepository,
+} from '../../domain/repository';
+
 export class BookAppointmentUseCase {
   constructor(
-    private slotRepository: ISlotRepository,
-    private appointmentRepository: IAppointmentRepository,
-    private confirmationService: { sendConfirmation: (details: any) => void }
+    private slotRepository: ISlotsRepository,
+    private appointmentRepository: IAppointmentRepository
   ) {}
 
   async execute(
@@ -15,28 +16,26 @@ export class BookAppointmentUseCase {
     patientId: string,
     patientName: string
   ): Promise<Appointment> {
-    const slot = await this.slotRepository.getSlotById(slotId);
-    if (!slot || !slot.isAvailable) {
-      throw new Error("Slot is unavailable");
+    const slotReservation = await this.slotRepository.reserveSlot(slotId);
+
+    if (!slotReservation) {
+      throw new Error('Slot is unavailable');
     }
 
-    const appointment = new Appointment(
-      new Date().getTime().toString(),
-      slotId,
-      patientId,
-      patientName,
-      new Date()
-    );
+    const appointment = new Appointment(slotId, patientId, patientName);
 
-    // Save the appointment and mark the slot as unavailable
-    await this.appointmentRepository.saveAppointment(appointment);
-    await this.slotRepository.updateSlotAvailability(slotId);
+    const createdAppointmentId =
+      await this.appointmentRepository.createAppointment(appointment);
 
-    this.confirmationService.sendConfirmation({
-      patientName,
-      doctorName: slot.doctorName,
-      time: slot.time,
-    });
+    if (createdAppointmentId) {
+      console.log('Emitting event: appointmentCreated', {
+        appointmentId: createdAppointmentId,
+      });
+
+      eventEmitter.emit('appointmentCreated', {
+        appointmentId: createdAppointmentId,
+      });
+    }
 
     return appointment;
   }

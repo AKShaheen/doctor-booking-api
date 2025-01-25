@@ -1,2 +1,2 @@
-export * from "./appointment.repository";
-export * from "./slot.repository";
+export * from './appointment.repository.interface';
+export * from './slots.repository.interface';

@@ -1,9 +1,9 @@
-import SlotModel, { ISlot } from "../models/slot.model";
+import SlotModel, { ISlot } from '../../../shared/database/models/slot.model';
 
 export class SlotRepository {
-  async addSlot(slot: any): Promise<void> {
+  async addSlot(slot: any) {
     const newSlot = new SlotModel(slot);
-    await newSlot.save();
+    return newSlot.save();
   }
 
   async getSlotsByDoctorId(doctorId: string): Promise<any[]> {
@@ -20,10 +20,15 @@ export class SlotRepository {
     );
   }
 
-  async getSlotById(slotId: string): Promise<Pick<ISlot, "isReserved"> | null> {
+  async getSlotById(slotId: string): Promise<ISlot | null> {
     const slotData = await SlotModel.findOne(
       { _id: slotId },
-      { isReserved: true }
+      {
+        isReserved: true,
+        time: true,
+        doctorName: true,
+        cost: true,
+      }
     );
     return slotData ? slotData : null;
   }

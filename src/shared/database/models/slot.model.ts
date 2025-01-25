@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 export interface ISlot {
   doctorId: string;
@@ -36,6 +36,6 @@ const slotSchema = new Schema<ISlot>(
   }
 );
 
-const SlotModel = model<ISlot>("Slot", slotSchema);
+const SlotModel = model<ISlot>('Slot', slotSchema);
 
 export default SlotModel;
