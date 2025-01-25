@@ -1,7 +1,8 @@
 import express from 'express';
-import { connectToMongoDB } from './config/database';
+import { connectToMongoDB } from './shared/database/config/database';
 import {
   appointmentBookingRoutes,
+  appointmentManagementRoutes,
   doctorAvailabilityRoutes,
 } from './modules/routes';
 
@@ -20,7 +21,7 @@ const PORT: number =
 async function initializeBackendService(): Promise<void> {
   app.use('/api/slots', doctorAvailabilityRoutes);
   app.use('/api/appointments-booking', appointmentBookingRoutes);
-  // app.use('/api')
+  app.use('/api/appointments-management', appointmentManagementRoutes);
 
   app.listen(PORT, () => {
     console.log(`Backend service running on port ${PORT}`);

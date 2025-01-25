@@ -4,6 +4,7 @@ export interface IAppointment {
   slotId: string;
   patientId: string;
   patientName: string;
+  appointmentTime: string;
   reservedAt: Date;
   status: string;
 }
@@ -18,6 +19,10 @@ const appointmentSchema = new Schema<IAppointment>({
     required: true,
   },
   patientName: {
+    type: String,
+    required: true,
+  },
+  appointmentTime: {
     type: String,
     required: true,
   },

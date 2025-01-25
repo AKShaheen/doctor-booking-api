@@ -30,12 +30,13 @@ export class AppointmentBookingController {
   async bookAppointment(req: Request, res: Response) {
     try {
       const slotId = req.query.slotId as string;
-      const { patientId, patientName } = req.body;
+      const { patientId, patientName, appointmentTime } = req.body;
 
       const result = await this.bookAppointmentUseCase.execute(
         slotId,
         patientId,
-        patientName
+        patientName,
+        appointmentTime
       );
 
       res.status(201).json(result);

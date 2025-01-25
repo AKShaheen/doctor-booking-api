@@ -1,3 +1,4 @@
+import { time } from 'console';
 import { eventEmitter } from '../../../../shared/events/event-emitter';
 import { Appointment } from '../../domain/entities/appointment.entity';
 import {
@@ -14,7 +15,8 @@ export class BookAppointmentUseCase {
   async execute(
     slotId: string,
     patientId: string,
-    patientName: string
+    patientName: string,
+    appointmentTime: string
   ): Promise<Appointment> {
     const slotReservation = await this.slotRepository.reserveSlot(slotId);
 
@@ -22,7 +24,12 @@ export class BookAppointmentUseCase {
       throw new Error('Slot is unavailable');
     }
 
-    const appointment = new Appointment(slotId, patientId, patientName);
+    const appointment = new Appointment(
+      slotId,
+      patientId,
+      patientName,
+      appointmentTime
+    );
 
     const createdAppointmentId =
       await this.appointmentRepository.createAppointment(appointment);

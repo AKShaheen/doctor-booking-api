@@ -30,7 +30,7 @@ export class AppointmentConfirmationService {
     const message: IAppointmentConfirmationService = {
       doctorName: slot.doctorName,
       patientName: appointment.patientName,
-      appointmentDate: slot.time.toString(),
+      appointmentDate: appointment.appointmentTime,
     };
 
     this.notifyPatient(message);

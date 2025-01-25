@@ -3,6 +3,7 @@ export class Appointment {
     public readonly slotId: string,
     public readonly patientId: string,
     public readonly patientName: string,
+    public readonly appointmentTime: string,
     public readonly reservedAt: Date = new Date(),
     public readonly status: string = 'scheduled'
   ) {}

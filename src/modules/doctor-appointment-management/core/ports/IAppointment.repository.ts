@@ -1,17 +1,9 @@
+import { IAppointment } from '../../../../shared/database/models/appointment.model';
+
 export interface IAppointmentRepository {
-  findUpcoming(doctorId: string): Promise<Appointment[]>;
+  findUpcoming(doctorId: string): Promise<IAppointment[]>;
   updateStatus(
     appointmentId: string,
-    status: "completed" | "cancelled"
+    status: 'completed' | 'cancelled'
   ): Promise<void>;
 }
-
-export type Appointment = {
-  id: string;
-  slotId: string;
-  patientId: string;
-  patientName: string;
-  doctorId: string;
-  time: Date;
-  status: "scheduled" | "completed" | "cancelled";
-};
