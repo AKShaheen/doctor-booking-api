@@ -6,7 +6,7 @@ import { SlotRepository } from '../doctor-availability/repositories/slots-reposi
 interface IAppointmentConfirmationService {
   doctorName: string;
   patientName: string;
-  appointmentDate: string;
+  appointmentDate: Date;
 }
 
 export class AppointmentConfirmationService {

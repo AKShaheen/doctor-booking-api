@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   AppointmentModel,
   IAppointment,
@@ -8,7 +9,9 @@ export class AppointmentAdapter implements IAppointmentRepository {
   async findUpcoming(doctorId: string): Promise<IAppointment[]> {
     return AppointmentModel.find({
       doctorId,
-      appointmentTime: { $gte: new Date() },
+      appointmentTime: {
+        $gte: moment(new Date(), 'DD/MM/YYYY hh:mm a', 'Africa/Cairo').toDate(),
+      },
       status: 'scheduled',
     }).lean();
   }

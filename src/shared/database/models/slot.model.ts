@@ -4,7 +4,7 @@ export interface ISlot {
   doctorId: string;
   doctorName: string;
   cost: number;
-  time: string;
+  time: Date;
   isReserved: boolean;
 }
 
@@ -23,7 +23,7 @@ const slotSchema = new Schema<ISlot>(
       required: true,
     },
     time: {
-      type: String,
+      type: Date,
       required: true,
     },
     isReserved: {

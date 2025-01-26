@@ -14,8 +14,8 @@ export class DoctorAvailabilityController {
 
       const slot = await this.addSlotService.addSlot(slotData);
       res.status(201).json(slot);
-    } catch (error) {
-      res.status(400).json({ error: 'Failed to create slot' });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
     }
   }
 

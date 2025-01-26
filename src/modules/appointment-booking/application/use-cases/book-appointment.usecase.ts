@@ -16,7 +16,7 @@ export class BookAppointmentUseCase {
     slotId: string,
     patientId: string,
     patientName: string,
-    appointmentTime: string
+    appointmentTime: Date
   ): Promise<Appointment> {
     const slotReservation = await this.slotRepository.reserveSlot(slotId);
 
