@@ -8,15 +8,10 @@ import {
 
 import './modules/appointment-confirmation/appointment-confirmation.listener';
 
-// import Redis from "ioredis";
-
 const app = express();
 app.use(express.json());
 
-const IS_CONSUMER_SERVER: boolean = process.env.IS_CONSUMER_SERVER === 'true';
-const PORT: number =
-  Number(process.env.PORT) || (IS_CONSUMER_SERVER ? 3002 : 3001);
-// const REDIS_URI: string = process.env.REDIS_URI || "redis://localhost:6379";
+const PORT: number = Number(process.env.PORT) || 3001;
 
 async function initializeBackendService(): Promise<void> {
   app.use('/api/slots', doctorAvailabilityRoutes);
@@ -30,14 +25,7 @@ async function initializeBackendService(): Promise<void> {
 
 async function main(): Promise<void> {
   await connectToMongoDB();
-  // await connectToRedis();
-
-  if (IS_CONSUMER_SERVER) {
-    //initialize consumer
-    console.log('Consumer started successfully');
-  } else {
-    await initializeBackendService();
-  }
+  await initializeBackendService();
 }
 
 main().catch((err: Error) => {

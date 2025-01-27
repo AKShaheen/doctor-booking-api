@@ -10,31 +10,11 @@ services:
       - "3001:3001"
     depends_on:
       - mongo
-      - redis
     volumes:
       - ../:/app
       - /app/node_modules
     env_file:
       - ../.env
-    command: npm run start:dev
-
-  doctor-booking-api-consumer:
-    build:
-      context: ..
-      dockerfile: ./devops/Dockerfile
-    container_name: doctor-booking-api-consumer
-    ports:
-      - "3002:3002"
-    depends_on:
-      - mongo
-      - redis
-    volumes:
-      - ../:/app
-      - /app/node_modules
-    env_file:
-      - ../.env
-    environment:
-      - IS_CONSUMER_SERVER=true
     command: npm run start:dev
 
   mongo:
@@ -44,12 +24,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
 
 volumes:
   mongo_data:
